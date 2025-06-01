@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Enviando ubicación</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <style>
+        #map { height: 90vh; width: 100%; }
+    </style>
+</head>
+<body>
+    <h2>Tu ubicación actual</h2>
+    <div id="map"></div>
+
+    <script>
+        let map;
+        let marker;
+
+        navigator.geolocation.watchPosition(function(position) {
+            const lat = position.coords.latitude;
+            const lng = position.coords.longitude;
+
+            if (!map) {
+                map = L.map('map').setView([lat, lng], 15);
+                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
+                marker = L.marker([lat, lng]).addTo(map).bindPopup("Tú (repartidor)").openPopup();
+            } else {
+                marker.setLatLng([lat, lng]);
+            }
+
+            // Enviar ubicación por WebSocket
+            socket.send(JSON.stringify({ lat: lat, lng: lng }));
+        }, function(error) {
+            alert("Activa tu GPS para enviar la ubicación.");
+        });
+
+        const socket = new WebSocket(`ws://localhost:8000/ws/ubicacion/{{ repartidor_id }}/`);
+        socket.onopen = () => console.log("WebSocket conectado para enviar ubicación");
+        socket.onerror = e => console.error("WebSocket error:", e);
+    </script>
+</body>
+</html>

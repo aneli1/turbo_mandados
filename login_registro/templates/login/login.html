@@ -1,0 +1,114 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.2.0/remixicon.css">
+   <link rel="stylesheet" href="{% static 'login/css/styles.css' %}">
+   <title>Formulario de Login y Registro</title>
+</head>
+
+<body>
+
+   <!--=============== LOGIN IMAGE ===============-->
+   <svg class="login__blob" viewBox="0 0 566 840" xmlns="http://www.w3.org/2000/svg">
+      <mask id="mask0" mask-type="alpha">
+         <path d="M342.407 73.6315C388.53 56.4007 394.378 17.3643 391.538 
+         0H566V840H0C14.5385 834.991 100.266 804.436 77.2046 707.263C49.6393 
+         591.11 115.306 518.927 176.468 488.873C363.385 397.026 156.98 302.824 
+         167.945 179.32C173.46 117.209 284.755 95.1699 342.407 73.6315Z" />
+      </mask>
+      <g mask="url(#mask0)">
+         <path d="M342.407 73.6315C388.53 56.4007 394.378 17.3643 391.538 
+         0H566V840H0C14.5385 834.991 100.266 804.436 77.2046 707.263C49.6393 
+         591.11 115.306 518.927 176.468 488.873C363.385 397.026 156.98 302.824 
+         167.945 179.32C173.46 117.209 284.755 95.1699 342.407 73.6315Z" />
+         <image class="login__img" href="{% static 'login/img/bg-img.jpg' %}" />
+      </g>
+   </svg>
+
+   <!--=============== LOGIN & REGISTER ===============-->
+   <div class="login container grid" id="loginAccessRegister">
+
+      <!-- Login -->
+      <div class="login__access">
+         <h1 class="login__title">Inicia sesión en tu cuenta.</h1>
+         <div class="login__area">
+            {% if error_login %}
+            <p style="color: red; font-weight: bold; text-align: center;">
+               {{ error_login }}
+            </p>
+            {% endif %}
+            <form method="post" action="{% url 'login_usuario' %}" class="login__form">
+               {% csrf_token %}
+               <div class="login__content grid">
+                  <div class="login__box">
+                     <input type="email" id="email" name="correo" required placeholder=" " class="login__input">
+                     <label for="email" class="login__label">Correo</label>
+                     <i class="ri-mail-fill login__icon"></i>
+                  </div>
+                  <div class="login__box">
+                     <input type="password" id="password" name="password" required placeholder=" " class="login__input">
+                     <label for="password" class="login__label">Contraseña</label>
+                     <i class="ri-eye-off-fill login__icon login__password" id="loginPassword"></i>
+                  </div>
+               </div>
+               <button type="submit" class="login__button">Iniciar sesión</button>
+            </form>
+            <p class="login__switch">
+               ¿No tienes una cuenta?
+               <button id="loginButtonRegister">Crea una cuenta</button>
+            </p>
+         </div>
+      </div>
+
+      <!-- Registro -->
+      <div class="login__register">
+         <form method="post" action="{% url 'registro_usuario' %}">
+            {% csrf_token %}
+            <h1 class="login__title">Crear cuenta nueva.</h1>
+            <div class="login__area">
+               <div class="login__content grid">
+                  <div class="login__group grid">
+                     <div class="login__box">
+                        <input name="nombre" type="text" id="names" required placeholder=" " class="login__input">
+                        <label for="names" class="login__label">Nombres</label>
+                        <i class="ri-id-card-fill login__icon"></i>
+                     </div>
+                     <div class="login__box">
+                        <input name="apellidos" type="text" id="surnames" required placeholder=" " class="login__input">
+                        <label for="surnames" class="login__label">Apellidos</label>
+                        <i class="ri-id-card-fill login__icon"></i>
+                     </div>
+                  </div>
+                  <div class="login__box">
+                     <input name="correo" type="email" id="emailCreate" required placeholder=" " class="login__input">
+                     <label for="emailCreate" class="login__label">Correo</label>
+                     <i class="ri-mail-fill login__icon"></i>
+                  </div>
+                  <div class="login__box">
+                     <input name="password" type="password" id="passwordCreate" required placeholder=" "
+                        class="login__input">
+                     <label for="passwordCreate" class="login__label">Contraseña</label>
+                     <i class="ri-eye-off-fill login__icon login__password" id="loginPasswordCreate"></i>
+                  </div>
+               </div>
+               <button type="submit" class="login__button">Crear cuenta</button>
+            </div>
+         </form>
+         <p class="login__switch">
+            ¿Ya tienes una cuenta?
+            <button id="loginButtonAccess" type="button">Iniciar sesión</button>
+         </p>
+      </div>
+
+   </div>
+
+   <!--=============== MAIN JS ===============-->
+   <script src="{% static 'login/js/main.js' %}"></script>
+
+</body>
+
+</html>

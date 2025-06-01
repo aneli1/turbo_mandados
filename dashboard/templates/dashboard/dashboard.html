@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Turbo Mandados</title>
+    <link href="https://fonts.googleapis.com/css2?family=Amatica+SC&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet" href="{% static 'dashboard/css/principal.css' %}">
+    <style>
+        .mandados-section {
+            max-width: 800px;
+            margin: 3rem auto;
+            padding: 1rem;
+            background: #fefefe;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .mandados-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .mandados-header h2 {
+            margin: 0;
+        }
+
+        .add-btn {
+            background-color: #007BFF;
+            border: none;
+            border-radius: 50%;
+            color: white;
+            font-size: 1.5rem;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+        }
+
+        .form-container {
+            margin-top: 1rem;
+            display: none;
+            background: #fff;
+            padding: 1rem;
+            border-radius: 8px;
+        }
+
+        .form-container input,
+        .form-container textarea {
+            width: 100%;
+            margin-bottom: 0.5rem;
+            padding: 0.5rem;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        .form-container button {
+            background-color: #28a745;
+            color: white;
+            border: none;
+            padding: 0.6rem 1.2rem;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .mandado-card {
+            background: white;
+            margin-top: 1rem;
+            padding: 1rem;
+            border-radius: 6px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Navbar -->
+    <header class="navbar">
+        <div class="navbar-left">
+            <img src="{% static 'dashboard/images/logo.png' %}" alt="Logo" class="logo">
+            <span class="brand-name">Turbo Mandados</span>
+        </div>
+        <div class="navbar-right">
+            <button class="btn login-btn">Iniciar sesión</button>
+        </div>
+    </header>
+
+    <!-- Hero -->
+    <section class="hero">
+        <div class="hero-content">
+            <h1 class="hero-title">Entre compas, nos echamos la mano.</h1>
+        </div>
+        <div class="hero-form">
+            <div class="input-icon">
+                <i class="fas fa-map-marker-alt"></i>
+                <input type="text" class="input-point" placeholder="Ingresa punto de entrega">
+            </div>
+            <div class="input-icon">
+                <i class="fas fa-clock"></i>
+                <select class="select-time">
+                    <option>Entregar ahora</option>
+                    <option>En 30 minutos</option>
+                    <option>En 1 hora</option>
+                </select>
+            </div>
+        </div>
+        <div class="hero-image">
+            <img src="{% static 'dashboard/images/caracol.png' %}" alt="Caracol repartidor" class="mascot-image">
+        </div>
+    </section>
+
+    {% if not usuario_id %}
+    <section class="benefits">
+        <div class="benefit-card">
+            <img src="{% static 'dashboard/images/image1.png' %}" alt="Repartidor feliz" class="benefit-img">
+            <div class="benefit-text">
+                <h3>¡Tú haces el paro, nosotros te premiamos!</h3>
+                <a href="/login/">Regístrate para realizar entregas</a>
+            </div>
+        </div>
+        <div class="benefit-card">
+            <img src="{% static 'dashboard/images/image2.png' %}" alt="Persona feliz" class="benefit-img">
+            <div class="benefit-text">
+                <h3>¿Te falta algo? Pídelo y relájate.</h3>
+                <a href="/login/">Regístrate</a>
+            </div>
+        </div>
+    </section>
+    {% endif %}
+
+    {% if usuario_id %}
+    <section class="mandados-section">
+        <div class="mandados-header">
+            <h2>Mandados</h2>
+            <button class="add-btn" onclick="toggleForm()"><i class="fas fa-plus"></i></button>
+        </div>
+        <div class="form-container" id="mandadoForm">
+            <input type="text" id="titulo" placeholder="Título del mandado" required>
+            <textarea id="descripcion" placeholder="Descripción" rows="3"></textarea>
+            <input type="number" id="precio" placeholder="Precio estimado" required>
+            <input type="text" id="contacto" placeholder="Número de contacto" required>
+            <button onclick="publicarMandado()">Publicar</button>
+        </div>
+        <div id="mandadosList">
+            {% for mandado in mandados %}
+            <div class="mandado-card">
+                <h3>{{ mandado.titulo }}</h3>
+                <p><strong>Descripción:</strong> {{ mandado.descripcion }}</p>
+                <p><strong>Precio:</strong> ${{ mandado.costo }}</p>
+                <p><strong>Contacto:</strong> {{ mandado.numContacto }}</p>
+
+                {% if not mandado.repartidor %}
+                <form method="post" action="{% url 'aceptar_mandado' mandado.id %}">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-success">Aceptar mandado</button>
+                </form>
+                {% else %}
+                {% if usuario_id == mandado.repartidor.id %}
+                <p><strong>Has aceptado este mandado.</strong></p>
+                <a href="/seguimiento/{{ mandado.id }}/repartidor/" class="btn btn-warning" style="margin-top: 0.5rem;">Comenzar entrega</a>
+                {% elif usuario_id == mandado.idUsuario.id %}
+                <p><strong>Este mandado fue aceptado.</strong></p>
+                <a href="/seguimiento/{{ mandado.id }}/cliente/" class="btn btn-primary" style="margin-top: 0.5rem;">Ver seguimiento</a>
+                {% else %}
+                <p><strong>Ya fue aceptado.</strong></p>
+                {% endif %}
+                {% endif %}
+            </div>
+            {% endfor %}
+
+        </div>
+    </section>
+    {% endif %}
+
+    <footer class="footer">
+        <p>&copy; 2025 Turbo Mandados - Todos los derechos reservados</p>
+    </footer>
+
+    <script>
+        function toggleForm() {
+            const form = document.getElementById('mandadoForm');
+            form.style.display = form.style.display === 'none' || form.style.display === '' ? 'block' : 'none';
+        }
+
+        function getCookie(name) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                const cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++) {
+                    const cookie = cookies[i].trim();
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+
+        function publicarMandado() {
+            const titulo = document.getElementById('titulo').value;
+            const descripcion = document.getElementById('descripcion').value;
+            const precio = document.getElementById('precio').value;
+            const contacto = document.getElementById('contacto').value;
+
+            if (!titulo || !descripcion || !precio || !contacto) {
+                alert('Por favor, completa todos los campos.');
+                return;
+            }
+
+            fetch('/mandados/crear/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                    'X-CSRFToken': getCookie('csrftoken')
+                },
+                body: `titulo=${encodeURIComponent(titulo)}&descripcion=${encodeURIComponent(descripcion)}&costo=${precio}&numContacto=${encodeURIComponent(contacto)}`
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        location.reload();
+                    } else {
+                        alert(data.mensaje);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Ocurrió un error al crear el mandado.');
+                });
+        }
+
+        document.querySelector('.login-btn').addEventListener('click', function () {
+            window.location.href = '/login/';
+        });
+    </script>
+</body>
+
+</html>

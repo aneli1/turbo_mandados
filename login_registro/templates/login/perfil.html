@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Perfil de Usuario</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background-color: #f0f2f5;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: auto;
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h2 {
+            margin-top: 0;
+            color: #333;
+        }
+
+        .info {
+            margin-bottom: 20px;
+        }
+
+        .section {
+            margin-bottom: 30px;
+        }
+
+        .section h3 {
+            color: #444;
+            border-bottom: 2px solid #ddd;
+            padding-bottom: 5px;
+            margin-bottom: 15px;
+        }
+
+        .mandado {
+            background-color: #f9f9f9;
+            padding: 10px 15px;
+            border-radius: 5px;
+            margin-bottom: 10px;
+            border-left: 4px solid #007bff;
+        }
+
+        .mandado strong {
+            color: #222;
+        }
+
+        .empty {
+            font-style: italic;
+            color: #999;
+        }
+
+        .btn-volver {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: bold;
+            transition: background-color 0.2s ease;
+        }
+
+        .btn-volver:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h2>👤 {{ usuario.nombre }} {{ usuario.apellidos }}</h2>
+        <div class="info">
+            <p><strong>Correo:</strong> {{ usuario.correo }}</p>
+        </div>
+
+        <div class="section">
+            <h3> Mandados Publicados</h3>
+            {% for mandado in mandados_creados %}
+            <div class="mandado">
+                <strong>{{ mandado.titulo }}</strong> — ${{ mandado.costo }} <br>
+                <small>{{ mandado.fecha|date:"d M Y H:i" }}</small>
+            </div>
+            {% empty %}
+            <p class="empty">No has publicado ningún mandado aún.</p>
+            {% endfor %}
+        </div>
+
+        <div class="section">
+            <h3> Mandados Aceptados</h3>
+            {% for mandado in mandados_repartidos %}
+            <div class="mandado">
+                <strong>{{ mandado.titulo }}</strong> — ${{ mandado.costo }} <br>
+                <small>{{ mandado.fecha|date:"d M Y H:i" }}</small>
+            </div>
+            {% empty %}
+            <p class="empty">No has aceptado ningún mandado aún.</p>
+            {% endfor %}
+        </div>
+        <div style="text-align: center; margin-top: 30px;">
+            <a href="{% url 'dashboard_view' %}" class="btn-volver">← Volver al menú</a>
+        </div>
+    </div>
+</body>
+
+</html>

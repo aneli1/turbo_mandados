@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Enviar ubicación</title>
+</head>
+<body>
+    <h2>Tu ubicación se está enviando...</h2>
+
+    <script>
+        const userID = {{ repartidor_id|safe }};
+        const socket = new WebSocket(`ws://localhost:8000/ws/ubicacion/${userID}/`);
+
+        socket.onopen = () => {
+            setInterval(() => {
+                navigator.geolocation.getCurrentPosition(position => {
+                    socket.send(JSON.stringify({
+                        lat: position.coords.latitude,
+                        lng: position.coords.longitude
+                    }));
+                });
+            }, 3000); // cada 3 segundos
+        };
+
+        socket.onerror = e => console.error("WebSocket error:", e);
+    </script>
+</body>
+</html>

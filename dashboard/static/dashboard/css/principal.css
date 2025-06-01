@@ -1,0 +1,232 @@
+body::-webkit-scrollbar {
+    display: none;
+}
+
+.btn-success {
+    background-color: #28a745;
+    color: white;
+    padding: 0.5rem 1rem;
+    text-decoration: none;
+    border-radius: 5px;
+}
+/*///////////////////////////////////////NAVAR//////////////////////////////////////////////*/
+.navbar {
+    display: flex;
+    justify-content: space-between;
+
+    align-items: center;
+    padding: 16px;
+}
+
+.logo {
+    width: 90px;
+    margin-left: 25px;
+
+}
+
+.brand-name {
+    margin-top: 10px;
+
+    color: #3D1D8C;
+    font-family: 'Amatica SC', cursive;
+    font-size: 40px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+}
+
+.navbar-left {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.navbar-right {
+    margin-left: auto;
+    display: flex;
+    gap: 10px;
+}
+
+.btn.login-btn {
+    width: 205px;
+    height: 48px;
+    flex-shrink: 0;
+    border-radius: 30px;
+    background: #FFF;
+    box-shadow: 5px 6px 5px 1px rgba(0, 0, 0, 0.25);
+    border: none;
+    color: #000;
+    font-family: "Aksara Bali Galang";
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+
+
+}
+
+.btn.register-btn {
+    width: 205px;
+    height: 48px;
+    flex-shrink: 0;
+    border-radius: 30px;
+    background: #000;
+    border: none;
+    color: #FFF;
+    font-family: "Aksara Bali Galang";
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+
+}
+
+
+
+/*///////////////////////////////////////ENCABEZADO//////////////////////////////////////////////*/
+.hero {
+    max-height: 250px;
+    background: #EAE4F1;
+    padding: 93px;
+    /* Agrega espacio interno */
+}
+
+.hero-content {
+    max-width: 800px;
+
+}
+
+.hero-title {
+    color: #000;
+    font-family: 'Quicksand', sans-serif;
+    font-size: 40px;
+    font-weight: 600;
+    /*  margin-top: 30px; este ahora sí se verá */
+}
+
+
+.hero-image {
+    margin-top: -200px;
+    margin-left: auto;
+    width: 543px;
+    height: 429px;
+    flex-shrink: 0;
+    aspect-ratio: 643/429;
+}
+
+.hero-form {
+    display: flex;
+    gap: 20px;
+    margin-top: 20px;
+    flex-wrap: wrap;
+}
+
+.input-icon {
+    position: relative;
+    display: inline-block;
+}
+
+.input-icon i {
+    position: absolute;
+    top: 50%;
+    left: 12px;
+    transform: translateY(-50%);
+    font-size: 18px;
+    color: black;
+    pointer-events: none;
+}
+
+.input-point,
+.select-time {
+    padding: 12px 12px 12px 40px;
+    /* espacio para ícono a la izquierda */
+    border-radius: 12px;
+    border: 1px solid #ccc;
+    background-color: #fff;
+    font-size: 16px;
+    width: 320px;
+    outline: none;
+    box-sizing: border-box;
+}
+
+.input-point:focus,
+.select-time:focus {
+    border: 2px solid #7D57C8;
+    box-shadow: 0 0 0 2px rgba(125, 87, 200, 0.2);
+}
+
+
+/*/////////////////Beneficios ////////////////////////*/
+.benefits {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 40px;
+  padding: 40px;
+  flex-wrap: wrap;
+}
+
+.benefit-card {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  width: 45%;
+  gap: 20px;
+}
+
+.benefit-img {
+  width: 180px;
+  height: auto;
+  border-radius: 10px;
+  object-fit: cover;
+}
+
+.benefit-text {
+  font-family: 'Quicksand', sans-serif;
+  font-size: 18px;
+}
+
+.benefit-text h3 {
+  margin: 0 0 10px 0;
+}
+
+.benefit-text a {
+  color: #403C3C;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.benefit-text a:hover {
+  text-decoration: underline;
+}
+
+/* ///////////////////////  ///////////////////////////////*/
+
+.delivery-points {
+  padding: 40px;
+  background-color: #f9f9f9;
+}
+
+.delivery-points h2 {
+  font-size: 28px;
+  font-weight: bold;
+  margin-bottom: 20px;
+}
+
+.campus-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 40px;
+}
+
+.campus-grid ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.campus-grid li {
+  font-family: 'Quicksand', sans-serif;
+  font-size: 16px;
+  margin-bottom: 8px;
+}
