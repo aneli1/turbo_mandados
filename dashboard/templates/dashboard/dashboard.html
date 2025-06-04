@@ -138,13 +138,15 @@
             <h2>Mandados</h2>
             <button class="add-btn" onclick="toggleForm()"><i class="fas fa-plus"></i></button>
         </div>
-        <div class="form-container" id="mandadoForm">
+
+        <div class="form-container" id="mandadoForm" style="display: none;">
             <input type="text" id="titulo" placeholder="Título del mandado" required>
             <textarea id="descripcion" placeholder="Descripción" rows="3"></textarea>
             <input type="number" id="precio" placeholder="Precio estimado" required>
             <input type="text" id="contacto" placeholder="Número de contacto" required>
             <button onclick="publicarMandado()">Publicar</button>
         </div>
+
         <div id="mandadosList">
             {% for mandado in mandados %}
             <div class="mandado-card">
@@ -161,20 +163,22 @@
                 {% else %}
                 {% if usuario_id == mandado.repartidor.id %}
                 <p><strong>Has aceptado este mandado.</strong></p>
-                <a href="/seguimiento/{{ mandado.id }}/repartidor/" class="btn btn-warning" style="margin-top: 0.5rem;">Comenzar entrega</a>
+                <a href="{% url 'seguimiento' mandado.id mandado.idUsuario.id mandado.repartidor.id 'cliente' %}"
+                    class="btn btn-warning" style="margin-top: 0.5rem;">Comenzar entrega</a>
                 {% elif usuario_id == mandado.idUsuario.id %}
                 <p><strong>Este mandado fue aceptado.</strong></p>
-                <a href="/seguimiento/{{ mandado.id }}/cliente/" class="btn btn-primary" style="margin-top: 0.5rem;">Ver seguimiento</a>
+                <a href="{% url 'seguimiento' mandado.id mandado.idUsuario.id mandado.repartidor.id 'repartidor' %}"
+                    class="btn btn-primary" style="margin-top: 0.5rem;">Ver seguimiento</a>
                 {% else %}
                 <p><strong>Ya fue aceptado.</strong></p>
                 {% endif %}
                 {% endif %}
             </div>
             {% endfor %}
-
         </div>
     </section>
     {% endif %}
+
 
     <footer class="footer">
         <p>&copy; 2025 Turbo Mandados - Todos los derechos reservados</p>

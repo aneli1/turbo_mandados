@@ -1,6 +1,7 @@
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from login_registro.models import Usuario
+from django.urls import reverse
 from .models import Mandado
 from django.shortcuts import render, redirect, get_object_or_404
 
@@ -40,10 +41,18 @@ def listar_mandados(request):
 
 def aceptar_mandado(request, mandado_id):
     mandado = get_object_or_404(Mandado, pk=mandado_id)
+
+    # Solo asignar repartidor si no hay uno ya
     if mandado.repartidor is None:
         usuario_id = request.session.get('usuario_id')
         if usuario_id:
             repartidor = Usuario.objects.get(pk=usuario_id)
             mandado.repartidor = repartidor
             mandado.save()
-    return redirect(f"/seguimiento/{mandado.idUsuario.id}/{mandado.repartidor.id}/repartidor/")
+
+            # Redirige a la vista seguimiento con mandado.id, cliente_id, repartidor_id y rol 'repartidor'
+            url = reverse('seguimiento', args=[mandado.id, mandado.idUsuario.id, mandado.repartidor.id, 'cliente'])
+            return redirect(url)
+
+    # Si ya tiene repartidor, redirige a listado u otra vista (ajusta según tu lógica)
+    return redirect('mandados_list')  # O la ruta que uses para listar mandados
