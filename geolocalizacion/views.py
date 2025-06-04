@@ -18,9 +18,11 @@ class geolocalizacion_view(APIView):
 def enviar_ubicacion_view(request, repartidor_id):
     return render(request, 'geolocalizacion/enviar_ubicacion.html', {'repartidor_id': repartidor_id})
 
-# Vista de seguimiento (cliente y repartidor comparten esta vista, pero con diferente rol)
-def seguimiento_view(request, mandado_id, yo):
-    return render(request, 'geolocalizacion/seguimiento.html', {
+def seguimiento_view(request, mandado_id, cliente_id, repartidor_id, yo):
+    context = {
         'mandado_id': mandado_id,
+        'cliente_id': cliente_id,
+        'repartidor_id': repartidor_id,
         'yo': yo,
-    })
+    }
+    return render(request, 'geolocalizacion/seguimiento.html', context)
