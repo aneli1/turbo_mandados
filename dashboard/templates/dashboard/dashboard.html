@@ -31,7 +31,7 @@
         }
 
         .add-btn {
-            background-color: #007BFF;
+            background-color: #3e1b5b;
             border: none;
             border-radius: 50%;
             color: white;
@@ -78,27 +78,49 @@
 </head>
 
 <body>
+
+
     <!-- Navbar -->
     <header class="navbar">
         <div class="navbar-left">
             <img src="{% static 'dashboard/images/logo.png' %}" alt="Logo" class="logo">
             <span class="brand-name">Turbo Mandados</span>
         </div>
+
         <div class="navbar-right">
+            {% if not usuario_id %}
             <button class="btn login-btn">Iniciar sesión</button>
+            {% else %}
+            <a href="?vista=publicar" class="nav-link {% if vista_actual == 'publicar' %}activo{% endif %}">publicar
+                mandado</a>
+            <a href="?vista=disponibles"
+                class="nav-link {% if vista_actual == 'disponibles' %}activo{% endif %}">Mandados
+                disponibles</a>
+            <form method="POST" action="login/" style="display: inline;">
+                {% csrf_token %}
+                <button class="icon logout-icon" title="Cerrar sesión" style="background: none; border: none;">
+                    <i class="fas fa-sign-out-alt"></i>
+                </button>
+            </form>
+            {% endif %}
         </div>
     </header>
 
     <!-- Hero -->
+
+
+    {% if not usuario_id %}
     <section class="hero">
         <div class="hero-content">
             <h1 class="hero-title">Entre compas, nos echamos la mano.</h1>
         </div>
+        <!-- FORMULARIO VISIBLE SOLO PARA USUARIOS NO LOGUEADOS -->
         <div class="hero-form">
             <div class="input-icon">
                 <i class="fas fa-map-marker-alt"></i>
                 <input type="text" class="input-point" placeholder="Ingresa punto de entrega">
             </div>
+
             <div class="input-icon">
                 <i class="fas fa-clock"></i>
                 <select class="select-time">
@@ -108,10 +130,131 @@
                 </select>
             </div>
         </div>
-        <div class="hero-image">
-            <img src="{% static 'dashboard/images/caracol.png' %}" alt="Caracol repartidor" class="mascot-image">
+    </section>
+
+    {% elif vista_actual == 'publicar' %}
+    <section class="hero">
+        <div class="hero-content">
+            <div class="subtitulos" style="font-weight: bold;">Entre compas, nos echamos la mano.</div>
+        </div>
+        <!-- VISTA DE PUBLICAR UN MANDADO (cuando está logueado) -->
+        <div class="separacion">
+            <div class="columna-izquierda">
+                <div class="mandados-header">
+                    <div class="subtitulos">Nuevo mandado</div>
+                    <button class="add-btn" onclick="toggleForm()"><i class="fas fa-plus"></i></button>
+                </div>
+
+                <div class="form-container" id="mandadoForm">
+                    <input type="text" id="titulo" placeholder="Título del mandado" required>
+                    <textarea id="descripcion" placeholder="Descripción" rows="3"></textarea>
+                    <input type="number" id="precio" placeholder="Precio estimado" required>
+                    <input type="text" id="contacto" placeholder="Número de contacto" required>
+                    <button onclick="publicarMandado()">Publicar</button>
+                </div>
+            </div>
+
+            <div class="columna-derecha misMandados">
+                <div class="subtitulos">Mis mandados</div>
+                <div id="mandadosList">
+                    {% for mandado in mandados %}
+                    <div class="mandado-card">
+                        <h3>{{ mandado.titulo }}</h3>
+                        <p><strong>Descripción:</strong> {{ mandado.descripcion }}</p>
+                        <p><strong>Precio:</strong> ${{ mandado.costo }}</p>
+                        <p><strong>Contacto:</strong> {{ mandado.numContacto }}</p>
+                        {% if not mandado.repartidor %}
+                        <p><strong>Este mandado aún no ha sido aceptado.</strong></p>
+                        {% else %}
+                        {% if usuario_id == mandado.idUsuario.id %}
+                        <p><strong>Este mandado fue aceptado.</strong></p>
+                        <a href="/seguimiento/{{ mandado.id }}/cliente/" class="btn btn-primary"
+                            style="margin-top: 0.5rem;">
+                            Ver seguimiento
+                        </a>
+                        {% else %}
+                        <p><strong>Ya fue aceptado por otro repartidor.</strong></p>
+                        {% endif %}
+                        {% endif %}
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
         </div>
     </section>
+
+    {% elif vista_actual == 'disponibles' %}
+    <section class="hero">
+        <div class="hero-content">
+            <div class="subtitulos" style="font-weight: bold;">Entre compas, nos echamos la mano.</div>
+        </div>
+        <!-- VISTA DE MANDADOS DISPONIBLES -->
+        <div class="separacion">
+            <div class="columna-izquierda">
+                <div class="mandados-header">
+                    <div class="subtitulos">Mandado actual</div>
+                    <button class="add-btn" onclick="toggleForm()"><i class="fas fa-chevron-down"></i></button>
+                </div>
+
+                <div class="form-container" id="mandadoForm">
+                    {% if mandado_actual %}
+                    <div class="mandado-card">
+                        <h3>{{ mandado_actual.titulo }}</h3>
+                        <p><strong>Descripción:</strong> {{ mandado_actual.descripcion }}</p>
+                        <p><strong>Precio:</strong> ${{ mandado_actual.costo }}</p>
+                        <p><strong>Contacto:</strong> {{ mandado_actual.numContacto }}</p>
+                        <a href="/seguimiento/{{ mandado_actual.id }}/repartidor/" class="btn btn-warning"
+                            style="margin-top: 0.5rem;">Comenzar entrega</a>
+                        <button class="btn btn-success" onclick="alert('Próximamente')">Marcar como completado</button>
+                    </div>
+                    {% else %}
+                    <p>No has aceptado ningún mandado aún.</p>
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="columna-derecha misMandados">
+                <div class="subtitulos">Mandados disponibles</div>
+                <div id="mandadosList">
+                    {% for mandado in mandados %}
+                    <div class="mandado-card">
+                        <h3>{{ mandado.titulo }}</h3>
+                        <p><strong>Descripción:</strong> {{ mandado.descripcion }}</p>
+                        <p><strong>Precio:</strong> ${{ mandado.costo }}</p>
+                        <p><strong>Contacto:</strong> {{ mandado.numContacto }}</p>
+
+                        {% if not mandado.repartidor %}
+                        <p><strong>Este mandado aún no ha sido aceptado.</strong></p>
+                        {% if mandado.idUsuario.id != usuario_id %}
+                        <form method="post" action="{% url 'aceptar_mandado' mandado.id %}">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-success">Aceptar mandado</button>
+                        </form>
+                        {% else %}
+                        <p style="color: gray;"><em>No puedes aceptar tu propio mandado.</em></p>
+                        {% endif %}
+                        {% else %}
+                        {% if usuario_id == mandado.repartidor.id %}
+                        <p><strong>Has aceptado este mandado.</strong></p>
+                        <a href="/seguimiento/{{ mandado.id }}/repartidor/" class="btn btn-warning"
+                            style="margin-top: 0.5rem;">
+                            Comenzar entrega
+                        </a>
+                        {% else %}
+                        <p><strong>Ya fue aceptado por otro repartidor.</strong></p>
+                        {% endif %}
+                        {% endif %}
+                    </div>
+                    {% empty %}
+                    <p style="text-align: center;">No hay mandados disponibles por ahora.</p>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </section>
+    {% endif %}
+
+
 
     {% if not usuario_id %}
     <section class="benefits">
@@ -131,8 +274,42 @@
         </div>
     </section>
     {% endif %}
+    <section class="delivery-points">
+        <h2>Puntos de entrega en la UTM</h2>
+        <div class="campus-grid">
+            <ul>
+                <li>Entrada Principal</li>
+                <li>Biblioteca</li>
+                <li>Auditorio</li>
+                <li>Centro de Idiomas</li>
+                <li>Salas de Cómputo 1 y 2</li>
+            </ul>
+            <ul>
+                <li>CESEMO</li>
+                <li>Vicerrectoría Administrativa</li>
+                <li>Vicerrectoría Académica</li>
+                <li>Instituto de Computación</li>
+                <li>Instituto de Diseño</li>
+            </ul>
+            <ul>
+                <li>Cafetería Central</li>
+                <li>Cafetería del lado Este</li>
+                <li>Centro de Copiado</li>
+                <li>Laboratorio de Electrónica Avanzada</li>
+                <li>Instituto de Electrónica y Mecatrónica</li>
+            </ul>
+            <ul>
+                <li>Edificio de Aulas (zona azul)</li>
+                <li>Plaza Cívica</li>
+                <li>Área de Canchas</li>
+                <li>Instituto de Minas</li>
+                <li>Instituto de Agroindustrias</li>
+            </ul>
+        </div>
+    </section>
 
-    {% if usuario_id %}
+
+    <!--     {% if usuario_id %}
     <section class="mandados-section">
         <div class="mandados-header">
             <h2>Mandados</h2>
@@ -175,7 +352,7 @@
         </div>
     </section>
     {% endif %}
-
+ -->
     <footer class="footer">
         <p>&copy; 2025 Turbo Mandados - Todos los derechos reservados</p>
     </footer>
