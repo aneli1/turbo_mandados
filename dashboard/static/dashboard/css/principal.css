@@ -81,14 +81,99 @@ body::-webkit-scrollbar {
 
 }
 
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 18px 40px;
+  background-color: #fff;
+  border-bottom: 2px solid #EAE4F1;
+  font-family: 'Quicksand', sans-serif;
+}
+
+.navbar-left {
+  display: flex;
+  align-items: center;
+}
+
+
+
+.brand-name {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #5f2c82;
+}
+
+.navbar-right {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+.nav-estado {
+  font-weight: bold;
+  background-color: #eae4f1;
+  padding: 6px 12px;
+  border-radius: 12px;
+  color: #5f2c82;
+}
+.nav-link.activo {
+  background-color: #eaeaea;
+  padding: 6px 14px;
+  border-radius: 12px;
+  font-weight: bold;
+}
+
+
+.btn.publish-btn {
+  background-color: #eaeaea;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 12px;
+  font-weight: 600;
+  font-family: 'Quicksand', sans-serif;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.btn.publish-btn:hover {
+  background-color: #d8d8d8;
+}
+
+.nav-link {
+  font-weight: bold;
+  font-size: 16px;
+  cursor: pointer;
+  color: #000;
+}
+
+.icon {
+  font-size: 20px;
+  color: #5f2c82;
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+.icon:hover {
+  color: #3e1b5b;
+}
+
+.logout-icon i {
+  font-size: 20px;
+  color: #5f2c82;
+}
+
+.logout-icon i:hover {
+  color: #c0392b;
+}
+
 
 
 /*///////////////////////////////////////ENCABEZADO//////////////////////////////////////////////*/
 .hero {
-    max-height: 250px;
-    background: #EAE4F1;
-    padding: 93px;
-    /* Agrega espacio interno */
+     background: #EAE4F1;
+    padding: 5px 40px 20px 40px; /* top, sides, bottom */
+    min-height: 400px; /* permite crecer si hay más contenido */
+    box-sizing: border-box;
 }
 
 .hero-content {
@@ -229,4 +314,53 @@ body::-webkit-scrollbar {
   font-family: 'Quicksand', sans-serif;
   font-size: 16px;
   margin-bottom: 8px;
+}
+
+
+/*//////////////////////////////////////////////*/
+.misMandados {
+  border-radius: 10px;
+  padding: 20px 40px;
+  width: 500px;
+  height: 400px;
+  background-color: #f9f9f9;
+  display: flex;
+  flex-direction: column; /* para organizar verticalmente */
+}
+.subtitulos{
+  color: #000;
+font-family: Quicksand;
+font-size: 20px;
+font-style: normal;
+font-weight: 600;
+line-height: normal;
+}
+.separacion {
+  display: flex;
+  gap: 40px; /* espacio entre columnas */
+  align-items: flex-start; /* alinear arriba */
+  flex-wrap: wrap; /* para que en pantallas pequeñas se adapten verticalmente */
+}
+#mandadosList {
+  flex: 1; /* que tome todo el espacio disponible dentro de misMandados */
+  overflow-y: auto;
+  border: 1px solid #ccc; /* opcional */
+  border-radius: 8px;
+  padding: 10px;
+  margin-bottom: 10px; /* espacio abajo para el texto */
+}
+
+
+.columna-izquierda, .columna-derecha {
+  flex: 1; /* cada columna ocupa igual espacio */
+  min-width: 300px; /* no se hagan muy pequeñas */
+  box-sizing: border-box;
+}
+
+.form-container {
+  margin-top: 20px; /* para separar el formulario del header */
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgb(0 0 0 / 0.1);
 }
