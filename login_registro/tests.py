@@ -1,8 +1,11 @@
+#Este archivo contiene pruebas para las vistas de login y registro de usuarios.
+
 import pytest
 from django.urls import reverse
 from login_registro.models import Usuario
 from django.contrib.auth.hashers import make_password
 
+#todas estas pruebas son de integración.
 @pytest.mark.django_db
 def test_menu_principal(client):
     response = client.get(reverse('dashboard_view'))
