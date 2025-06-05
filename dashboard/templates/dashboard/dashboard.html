@@ -74,6 +74,52 @@
             border-radius: 6px;
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
         }
+
+        .rating {
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+            font-family: 'Quicksand', sans-serif;
+        }
+
+        .estrella {
+            font-size: 2rem;
+            cursor: pointer;
+            font-family: Arial, sans-serif;
+            color: #ccc !important;
+            transition: color 0.2s ease;
+        }
+
+        /* Se colorean con clases dinámicas */
+        .estrella.color-1 {
+            color: #c9a7ff !important;
+        }
+
+        /* Morado muy claro */
+        .estrella.color-2 {
+            color: #b48aff !important;
+        }
+
+        .estrella.color-3 {
+            color: #9e6eff !important;
+        }
+
+        .estrella.color-4 {
+            color: #874fff !important;
+        }
+
+        .estrella.color-5 {
+            color: #6b30ff !important;
+        }
+
+        /* Morado intenso */
+
+
+        .mensaje-calificacion {
+            margin-left: 0.6rem;
+            font-size: 0.95rem;
+            color: #555;
+        }
     </style>
 </head>
 
@@ -168,10 +214,19 @@
                         {% else %}
                         {% if usuario_id == mandado.idUsuario.id %}
                         <p><strong>Este mandado fue aceptado.</strong></p>
-                        <a href="{% url 'seguimiento' mandado.id mandado.idUsuario.id mandado.repartidor.id 'repartidor' %}" class="btn btn-primary"
-                            style="margin-top: 0.5rem;">
+                        <a href="{% url 'seguimiento' mandado.id mandado.idUsuario.id mandado.repartidor.id 'repartidor' %}"
+                            class="btn btn-primary" style="margin-top: 0.5rem;">
                             Ver seguimiento
                         </a>
+                           <div class="rating" data-id="{{ mandado.id }}">
+                            <span class="estrella" data-value="1">&#9733;</span>
+                            <span class="estrella" data-value="2">&#9733;</span>
+                            <span class="estrella" data-value="3">&#9733;</span>
+                            <span class="estrella" data-value="4">&#9733;</span>
+                            <span class="estrella" data-value="5">&#9733;</span>
+                            <span class="mensaje-calificacion">Calificación: <span class="valor-calificacion">Sin
+                                    calificar</span></span>
+                        </div>
                         {% else %}
                         <p><strong>Ya fue aceptado por otro repartidor.</strong></p>
                         {% endif %}
@@ -203,8 +258,8 @@
                         <p><strong>Descripción:</strong> {{ mandado_actual.descripcion }}</p>
                         <p><strong>Precio:</strong> ${{ mandado_actual.costo }}</p>
                         <p><strong>Contacto:</strong> {{ mandado_actual.numContacto }}</p>
-                        <a href="{% url 'seguimiento' mandado_actual.id mandado_actual.idUsuario.id mandado_actual.repartidor.id 'cliente' %}" class="btn btn-warning"
-                            style="margin-top: 0.5rem;">Comenzar entrega</a>
+                        <a href="{% url 'seguimiento' mandado_actual.id mandado_actual.idUsuario.id mandado_actual.repartidor.id 'cliente' %}"
+                            class="btn btn-warning" style="margin-top: 0.5rem;">Comenzar entrega</a>
                         <button class="btn btn-success" onclick="alert('Próximamente')">Marcar como completado</button>
                     </div>
                     {% else %}
@@ -236,8 +291,7 @@
                         {% else %}
                         {% if usuario_id == mandado.repartidor.id %}
                         <p><strong>Has aceptado este mandado.</strong></p>
-                        <a href="" class="btn btn-warning"
-                            style="margin-top: 0.5rem;">
+                        <a href="" class="btn btn-warning" style="margin-top: 0.5rem;">
                             Comenzar entrega
                         </a>
                         {% else %}
@@ -356,7 +410,7 @@
     </section>
     {% endif %}
  -->
-  
+
     <footer class="footer">
         <p>&copy; 2025 Turbo Mandados - Todos los derechos reservados</p>
     </footer>
@@ -419,6 +473,66 @@
             window.location.href = '/login/';
         });
     </script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const ratings = document.querySelectorAll('.rating');
+
+            ratings.forEach(rating => {
+                const mandadoId = rating.getAttribute('data-id');
+                const estrellas = rating.querySelectorAll('.estrella');
+                const mensaje = rating.querySelector('.valor-calificacion');
+
+                const guardado = localStorage.getItem(`calificacion_${mandadoId}`);
+                if (guardado) {
+                    actualizarVisual(estrellas, parseInt(guardado), mensaje);
+                }
+
+                estrellas.forEach(estrella => {
+                    estrella.addEventListener('click', () => {
+                        const valor = parseInt(estrella.getAttribute('data-value'));
+                        localStorage.setItem(`calificacion_${mandadoId}`, valor);
+                        actualizarVisual(estrellas, valor, mensaje);
+                    });
+                });
+            });
+
+            function actualizarVisual(estrellas, valor, display) {
+                estrellas.forEach((estrella, idx) => {
+                    estrella.className = 'estrella'; // Limpia todo
+                    if (idx < valor) {
+                        estrella.classList.add(`color-${idx + 1}`); // Asigna color según posición real
+                    }
+                });
+
+                display.textContent = `${valor} estrella${valor > 1 ? 's' : ''}`;
+            }
+
+
+        });
+    </script>
+
+    <style>
+        .estrella.color-1 {
+            color: #c9a7ff !important;
+        }
+
+        .estrella.color-2 {
+            color: #b48aff !important;
+        }
+
+        .estrella.color-3 {
+            color: #9e6eff !important;
+        }
+
+        .estrella.color-4 {
+            color: #874fff !important;
+        }
+
+        .estrella.color-5 {
+            color: #6b30ff !important;
+        }
+    </style>
 </body>
 
 </html>
