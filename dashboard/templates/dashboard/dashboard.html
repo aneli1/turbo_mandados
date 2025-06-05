@@ -203,7 +203,7 @@
                         <p><strong>Descripción:</strong> {{ mandado_actual.descripcion }}</p>
                         <p><strong>Precio:</strong> ${{ mandado_actual.costo }}</p>
                         <p><strong>Contacto:</strong> {{ mandado_actual.numContacto }}</p>
-                        <a href="/seguimiento/{{ mandado_actual.id }}/repartidor/" class="btn btn-warning"
+                        <a href="{% url 'seguimiento' mandado_actual.id mandado_actual.idUsuario.id mandado_actual.repartidor.id 'cliente' %}" class="btn btn-warning"
                             style="margin-top: 0.5rem;">Comenzar entrega</a>
                         <button class="btn btn-success" onclick="alert('Próximamente')">Marcar como completado</button>
                     </div>
@@ -236,7 +236,7 @@
                         {% else %}
                         {% if usuario_id == mandado.repartidor.id %}
                         <p><strong>Has aceptado este mandado.</strong></p>
-                        <a href="url 'seguimiento' mandado.id mandado.idUsuario.id mandado.repartidor.id 'cliente'" class="btn btn-warning"
+                        <a href="" class="btn btn-warning"
                             style="margin-top: 0.5rem;">
                             Comenzar entrega
                         </a>
