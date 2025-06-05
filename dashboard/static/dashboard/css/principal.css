@@ -364,3 +364,31 @@ line-height: normal;
   border-radius: 8px;
   box-shadow: 0 0 10px rgb(0 0 0 / 0.1);
 }
+.rating {
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+    font-family: 'Quicksand', sans-serif;
+}
+
+.estrella {
+  font-size: 2rem;
+  cursor: pointer;
+  font-family: Arial, sans-serif;
+  color: #ccc !important;
+  transition: color 0.2s ease;
+}
+
+  /* Se colorean con clases dinámicas */
+.estrella.color-1 { color: #c9a7ff !important; }  /* Morado muy claro */
+.estrella.color-2 { color: #b48aff !important; }
+.estrella.color-3 { color: #9e6eff !important; }
+.estrella.color-4 { color: #874fff !important; }
+.estrella.color-5 { color: #6b30ff !important; }  /* Morado intenso */
+
+
+.mensaje-calificacion {
+    margin-left: 0.6rem;
+    font-size: 0.95rem;
+    color: #555;
+}
