@@ -168,7 +168,7 @@
                         {% else %}
                         {% if usuario_id == mandado.idUsuario.id %}
                         <p><strong>Este mandado fue aceptado.</strong></p>
-                        <a href="/seguimiento/{{ mandado.id }}/cliente/" class="btn btn-primary"
+                        <a href="{% url 'seguimiento' mandado.id mandado.idUsuario.id mandado.repartidor.id 'repartidor' %}" class="btn btn-primary"
                             style="margin-top: 0.5rem;">
                             Ver seguimiento
                         </a>
@@ -236,7 +236,7 @@
                         {% else %}
                         {% if usuario_id == mandado.repartidor.id %}
                         <p><strong>Has aceptado este mandado.</strong></p>
-                        <a href="/seguimiento/{{ mandado.id }}/repartidor/" class="btn btn-warning"
+                        <a href="url 'seguimiento' mandado.id mandado.idUsuario.id mandado.repartidor.id 'cliente'" class="btn btn-warning"
                             style="margin-top: 0.5rem;">
                             Comenzar entrega
                         </a>
